@@ -1,22 +1,26 @@
 import React, { Component } from 'react';
 import { Card, CardTitle, Button, Modal, ModalHeader, ModalBody } from 'reactstrap';
 
-class People extends Component {
+export default class People extends Component {
     
     constructor(props) {
+
         super(props);
         this.state = {
             items: [],
             char: {
-                films: []
+                films: [],
+                movies: []
             },
-            movies: [],
+            titles: [],
             pageNumber: 1,
             isModalOpen: false
         }
+
         this.toggleModal = this.toggleModal.bind(this);
         this.changeNumber = this.changeNumber.bind(this);
         this.fetchCharacters = this.fetchCharacters.bind(this);
+        this.fetchFilms = this.fetchFilms.bind(this);
     }
 
     toggleModal(item) {
@@ -54,27 +58,26 @@ class People extends Component {
                     items: [...state.items, ...res.results]
                 }));
             }
-        });
+        })
+        .catch(err => console.log(err));
     }
 
-    fetchFilms() {
-        const baseUrl = 'https://swapi.dev/api/films/';
-
-        fetch(baseUrl)
+    fetchFilms(film) {
+        fetch(film)
         .then(res => res.json())
         .then(res => {
-            console.log(res.results);
-            if(res.results && res.results.length > 0) {
+            if(res && res.length > 0) {
                 this.setState((state) => ({
-                    films: [res.results]
-                }))
+                    titles: res
+                }));
+                console.log(this.state.titles);
             }
-        });
+        })
+        .catch(err => console.log(err));
     }
 
     componentDidMount() {
         this.fetchCharacters();
-        this.fetchFilms();
     }
 
     render() {
@@ -86,7 +89,6 @@ class People extends Component {
                         <div key={index} className="col-12 col-sm-6">
                             <Card body onClick={() => {
                                 this.toggleModal(item);
-                                console.log(item);
                             }}>            
                                 <CardTitle>{item.name}</CardTitle>
                                 <div>Gender: {item.gender}</div>
@@ -102,7 +104,34 @@ class People extends Component {
                                         <p>Height: {this.state.char.height}cm</p>
                                         <div>
                                             Films it Appeared in:
-                                                {this.state.char.films}
+                                            {this.state.char.films && this.state.char.films.length > 0 
+                                                && this.state.char.films.map((film) => {
+                                                this.fetchFilms(film);
+                                                /*fetch(film)
+                                                .then(res=>res.json())
+                                                .then(res => {
+                                                    const movieList = res.title;
+                                                    return <p>{movieList}</p>
+                                                })
+                                                .catch(err => console.log(err));
+
+                                                this.movieList > 0 && this.movieList.map((movie, i) => {
+                                                    console.log(movie[i]);
+                                                    return (
+                                                        <div key={i}>
+                                                            {movie}
+                                                        </div>
+                                                    );
+                                                })*/    
+                                            })
+                                            }
+                                            {this.state.titles && this.state.titles.length > 0 
+                                                && this.state.titles.map((movie, index) => {
+                                                    console.log(movie);
+                                                    <div key={index}>
+                                                        {movie.title}
+                                                    </div>
+                                                })}
                                         </div>
                                     </div>
                                 </ModalBody>
@@ -115,12 +144,9 @@ class People extends Component {
                         this.changeNumber();
                     }}>
                         Load More...
-                    </Button>
-                    
+                    </Button> 
                 </div>
             </div>
         );
     }
 }
-
-export default People;
