@@ -104,11 +104,14 @@ export default class People extends Component {
                                         <div>
                                             Films it Appeared in:
                                             {this.state.char.films && this.state.char.films.length > 0 
-                                                && this.state.char.films.map((film) => {
+                                                && this.state.char.films.map((film, index) => {
                                                 this.fetchFilms(film);
+                                                console.log(this.state.titles);
+                                                return (
+                                                    <div key={index}>{this.state.titles.title}</div>
+                                                );
                                             })}
-                                            {this.state.titles.title}
-                                        </div>
+                                       </div>
                                     </div>
                                 </ModalBody>
                             </Modal> 
