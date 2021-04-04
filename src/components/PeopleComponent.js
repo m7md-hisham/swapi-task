@@ -66,11 +66,10 @@ export default class People extends Component {
         fetch(film)
         .then(res => res.json())
         .then(res => {
-            if(res && res.length > 0) {
-                this.setState((state) => ({
+            if(res) {
+                this.setState((state)=> ({
                     titles: res
                 }));
-                console.log(this.state.titles);
             }
         })
         .catch(err => console.log(err));
@@ -107,31 +106,8 @@ export default class People extends Component {
                                             {this.state.char.films && this.state.char.films.length > 0 
                                                 && this.state.char.films.map((film) => {
                                                 this.fetchFilms(film);
-                                                /*fetch(film)
-                                                .then(res=>res.json())
-                                                .then(res => {
-                                                    const movieList = res.title;
-                                                    return <p>{movieList}</p>
-                                                })
-                                                .catch(err => console.log(err));
-
-                                                this.movieList > 0 && this.movieList.map((movie, i) => {
-                                                    console.log(movie[i]);
-                                                    return (
-                                                        <div key={i}>
-                                                            {movie}
-                                                        </div>
-                                                    );
-                                                })*/    
-                                            })
-                                            }
-                                            {this.state.titles && this.state.titles.length > 0 
-                                                && this.state.titles.map((movie, index) => {
-                                                    console.log(movie);
-                                                    <div key={index}>
-                                                        {movie.title}
-                                                    </div>
-                                                })}
+                                            })}
+                                            {this.state.titles.title}
                                         </div>
                                     </div>
                                 </ModalBody>
