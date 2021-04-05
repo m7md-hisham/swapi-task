@@ -10,7 +10,6 @@ export default class People extends Component {
             items: [],
             char: {
                 films: [],
-                movies: []
             },
             titles: [],
             pageNumber: 1,
@@ -68,9 +67,10 @@ export default class People extends Component {
         .then(res => {
             if(res) {
                 this.setState((state)=> ({
-                    titles: res
+                    titles: res.title
                 }));
             }
+            console.log(this.state.titles)
         })
         .catch(err => console.log(err));
     }
@@ -88,6 +88,9 @@ export default class People extends Component {
                         <div key={index} className="col-12 col-sm-6">
                             <Card body onClick={() => {
                                 this.toggleModal(item);
+                                item.films.map((film, index) => {
+                                    this.fetchFilms(film);
+                                })
                             }}>            
                                 <CardTitle>{item.name}</CardTitle>
                                 <div>Gender: {item.gender}</div>
@@ -102,15 +105,16 @@ export default class People extends Component {
                                         <p>Mass: {this.state.char.mass}kg</p>
                                         <p>Height: {this.state.char.height}cm</p>
                                         <div>
-                                            Films it Appeared in:
-                                            {this.state.char.films && this.state.char.films.length > 0 
-                                                && this.state.char.films.map((film, index) => {
-                                                this.fetchFilms(film);
-                                                console.log(this.state.titles);
-                                                return (
-                                                    <div key={index}>{this.state.titles.title}</div>
-                                                );
-                                            })}
+                                            Films it Appeared in: 
+                                            {this.state.char.films && this.state.char.films.length > 0 &&
+                                                this.state.char.films.map((film, i) => {
+                                                    return(
+                                                        <div>
+                                                            <p key={i}>{film}</p>
+                                                        </div>
+                                                    )
+                                                })}
+                                            <p>*The fetching of the names of the movies exist in the console, but I do not know a way to display it!</p>
                                        </div>
                                     </div>
                                 </ModalBody>
